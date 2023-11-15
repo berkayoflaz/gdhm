@@ -4,30 +4,42 @@
   </c-card-header>
   <c-card-body> 
     <form [formGroup]="cardForm" cForm>
-        <div class="mb-3">
-          <label cLabel for="exampleFormControlInput1">Yazar Adı</label>
-          <ng-select formControlName="authorId">
-            <ng-option *ngFor="let d of data" [value]="d.id">{{d.fullName}}</ng-option>
-          </ng-select>
-        </div>
-        <div class="mb-3">
-          <label cLabel for="exampleFormControlTextarea1">Başlangıç Tarihi</label>
-          <input cFormControl
-                 id="exampleFormControlTextarea1"
-                 placeholder="01-02-2023"
-                 type="date"
-                 formControlName="dateRangeStart"
-          />
-        </div>
-        <div class="mb-3">
-            <label cLabel for="exampleFormControlTextarea2">Bitiş Tarihi</label>
+      <div  style="float:left;width:100px;height:50px;margin-left:3px;padding:0px auto;font-size:11px" *ngFor="let d of data;let i = index" class="col-md-2">
+        <label>
+          <input type="checkbox" [value]="d.id" (change)="onCheckChange($event)">
+          {{d.fullName}}
+        </label>
+      </div>
+       <!-- <div *ngFor="let d of data" class="mb-5">
+          <c-form-check  [inline]="true">
+            <input cFormCheckInput formControlName="authorId" id="inline1" type="checkbox" />
+            <label cFormCheckLabel for="inline1"><p style="font-size:11px">{{d.fullName}}</p></label>
+          </c-form-check>
+        </div>-->
+        <div class="clearfix"></div>
+          <!--<div class="mb-3 col-12">
             <input cFormControl
-                   id="exampleFormControlTextarea2"
-                   placeholder="02-02-2023"
-                   type="date"
-                   formControlName="dateRangeEnd"
+                  id="exampleFormControlTextarea1"
+                  placeholder="01-02-2023"
+                  type="date"
+                  formControlName="dateRangeStart"
             />
-        </div>
+            -
+            <input style="  " cFormControl
+                    id="exampleFormControlTextarea2"
+                    placeholder="02-02-2023"
+                    type="date"
+                    formControlName="dateRangeEnd"
+              />
+          </div>-->
+          <c-row class="mt-3">
+            <c-col sm="3">
+              <input type="date" aria-label="First name" cFormControl formControlName="dateRangeStart" placeholder="Başlangıç Tarihi" />
+            </c-col>
+            <c-col sm="3">
+              <input type="date" aria-label="Last name" cFormControl formControlName="dateRangeEnd" placeholder="Bitiş Tarihi" />
+            </c-col>
+          </c-row>
         <button cButton (click)="onSubmit()" class="mt-3" color="primary">
             Yazıları Getir
         </button>
@@ -35,19 +47,24 @@
   </c-card-body>
 </c-card>
 
-<c-card *ngIf="getNews.length > 0">
+<c-card *ngIf="getNewsF.length > 0">
   <c-card-body>
     <table cTable>
       <thead>
       <tr>
         <th scope="col">#</th>
-        <th scope="col">İçerik ({{newsResponse.total}} yazı listelendi.)</th>
+        <th scope="col">İçerik</th>
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let getN of getNews; index as i">
+      <tr *ngFor="let getN of getAuthor; index as i">
         <th scope="row">{{i+1}}</th>
-        <td><a target="_blank" href="https://gdh.digital/haber-{{getN.id}}">{{getN.message}}</a></td>
+        <td>
+          {{getN.fullName}}({{getN.articles.length}})
+          <div>
+            <p *ngFor="let article of getN.articles" ><a target="_blank" href="https://gdh.digital/{{article.slug}}-{{article.id}}">{{ article.title }}</a></p>
+          </div>
+        </td>
       </tr>
       </tbody>
     </table>

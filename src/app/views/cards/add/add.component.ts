@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, FormArray  } from '@angular/forms';
 import { CardService } from '../../../services/card.service'
 import { Router } from '@angular/router';
 
@@ -11,9 +11,11 @@ import { Router } from '@angular/router';
 export class AddComponent implements OnInit {
   data:any[] = []
   newsResponse:any = {}
+  getNewsF:any[] = []
   getNews:any[] = []
+  getAuthor:any[] = []
   cardForm = new FormGroup({
-    authorId: new FormControl(''),
+    authorId: new FormArray([]),
     dateRangeStart: new FormControl(''),
     dateRangeEnd: new FormControl('')
   })
@@ -24,15 +26,35 @@ export class AddComponent implements OnInit {
     this.load();  
   }
   onSubmit(){
+    this.getAuthor = []
+    this.cardForm.value.authorId?.forEach((author:any) => {
+      this.data.forEach(d => {
+        if(d.id == author){
+          d.articles = []
+          this.getAuthor.push(d)
+        }
+      })
+    })
     this.cardService.getNewsByAuthor(this.cardForm.value).subscribe({
       next: data =>{
         this.newsResponse = data
-        this.getNews = this.newsResponse.results
-        console.log(this.getNews,'news')
+        this.getNewsF = this.newsResponse.results
+        console.log(this.getAuthor,2);
+        this.getNewsF.forEach(item => {
+          if(item.title !== ""){
+            console.log(item,'item')
+            this.getAuthor.forEach(gA => {
+              if(item.author == gA.id){
+                if(gA.articles.indexOf())
+                gA.articles.push(item)
+              }
+            })
+          }
+        })
         //this.router.navigate(['/card/list'])
       },
       error: err =>{
-        console.log(err,'error')
+        this.router.navigate(['#/login'])
       }
     })
     console.log(this.cardForm.value,'form value')
@@ -69,6 +91,30 @@ export class AddComponent implements OnInit {
     docElement.target = '_blank';
     docElement.download = fileNameWithType;
     docElement.click();*/
+  }
+  onCheckChange(event:any) {
+    const formArray: FormArray = this.cardForm.get('authorId') as FormArray;
+  
+    /* Selected */
+    if(event.target.checked){
+      // Add a new control in the arrayForm
+      formArray.push(new FormControl(event.target.value));
+    }
+    /* unselected */
+    else{
+      // find the unselected element
+      let i: number = 0;
+  
+      formArray.controls.forEach((ctrl: any) => {
+        if(ctrl.value == event.target.value) {
+          // Remove the unselected element from the arrayForm
+          formArray.removeAt(i);
+          return;
+        }
+  
+        i++;
+      });
+    }
   }
 }
 

@@ -26,7 +26,6 @@ export class StorageService {
     const stringifyUser:any = window.sessionStorage.getItem('auth');
     if(stringifyUser){
       const user = JSON.parse(stringifyUser);
-      console.log(user,'user')
       const token = user.token;
       return token;
     }else{

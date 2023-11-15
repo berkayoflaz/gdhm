@@ -33,7 +33,7 @@ export class CardService {
     return this.http.put(`${AUTH_API}ads/${id}`,params,httpOptions)
   }
   getNewsByAuthor(params:any){
-    return this.http.get(`https://api.gdh.digital/editor/stories?page=1&limit=50&author=${params.authorId}&dateRangeStart=${params.dateRangeStart}&dateRangeEnd=${params.dateRangeEnd}`,httpOptions)
+    return this.http.get(`https://api.gdh.digital/editor/stories?page=1&limit=1000&dateRangeStart=${params.dateRangeStart}&dateRangeEnd=${params.dateRangeEnd}&status=published&breaking=false`,httpOptions)
   }
 }
 
