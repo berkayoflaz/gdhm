@@ -41,6 +41,7 @@ export class AddComponent implements OnInit {
         this.getNewsF = this.newsResponse.results
         console.log(this.getAuthor,2);
         this.getNewsF.forEach(item => {
+          console.log(item)
           if(item.title !== ""){
             console.log(item,'item')
             this.getAuthor.forEach(gA => {

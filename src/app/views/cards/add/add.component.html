@@ -4,7 +4,7 @@
   </c-card-header>
   <c-card-body> 
     <form [formGroup]="cardForm" cForm>
-      <div  style="float:left;width:100px;height:50px;margin-left:3px;padding:0px auto;font-size:11px" *ngFor="let d of data;let i = index" class="col-md-2">
+      <div  style="font-size:11px;float:left;width:200px;padding-bottom:5px;padding-top:5px" *ngFor="let d of data;let i = index">
         <label>
           <input type="checkbox" [value]="d.id" (change)="onCheckChange($event)">
           {{d.fullName}}
@@ -62,7 +62,7 @@
         <td>
           {{getN.fullName}}({{getN.articles.length}})
           <div>
-            <p *ngFor="let article of getN.articles" ><a target="_blank" href="https://gdh.digital/{{article.slug}}-{{article.id}}">{{ article.title }}</a></p>
+            <p *ngFor="let article of getN.articles" ><a target="_blank" href="https://gdh.digital/{{article.slug}}-{{article.id}}">{{ article.title }}</a><span style="float: right;font-size:11px">{{ article.createdAt }}</span></p>
           </div>
         </td>
       </tr>
